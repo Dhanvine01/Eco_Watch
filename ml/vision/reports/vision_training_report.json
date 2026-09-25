@@ -1,0 +1,32 @@
+{
+  "corrosion_patch_model": {
+    "accuracy": 0.9853,
+    "f1_weighted": 0.9853,
+    "test_samples": 3672,
+    "confusion_matrix": [
+      [
+        1506,
+        30
+      ],
+      [
+        24,
+        2112
+      ]
+    ]
+  },
+  "water_leak_image_model": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "test_samples": 605,
+    "confusion_matrix": [
+      [
+        307,
+        0
+      ],
+      [
+        0,
+        298
+      ]
+    ]
+  }
+}

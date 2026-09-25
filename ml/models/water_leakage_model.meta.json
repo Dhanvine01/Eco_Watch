@@ -1,0 +1,23 @@
+{
+  "model_name": "water_leakage_model",
+  "feature_columns": [
+    "moisture_raw",
+    "moisture_pct",
+    "humidity_pct",
+    "pressure_bar",
+    "flow_rate_lpm",
+    "pressure_drop_bar",
+    "vibration_hz",
+    "sound_db"
+  ],
+  "label_column": "label",
+  "classes": [
+    "0:normal",
+    "1:leak",
+    "2:burst"
+  ],
+  "scaler": "StandardScaler",
+  "version": "1.0.0",
+  "framework": "scikit-learn",
+  "trained_at": "2026-09-25T04:51:34.435069"
+}

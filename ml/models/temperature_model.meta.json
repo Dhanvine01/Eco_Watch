@@ -1,0 +1,22 @@
+{
+  "model_name": "temperature_model",
+  "feature_columns": [
+    "temperature_c",
+    "humidity_pct",
+    "heat_index_c",
+    "temp_rate_change",
+    "ambient_temp_c",
+    "delta_temp_c",
+    "cycles_since_maint"
+  ],
+  "label_column": "label",
+  "classes": [
+    "0:normal",
+    "1:high",
+    "2:critical"
+  ],
+  "scaler": "StandardScaler",
+  "version": "1.0.0",
+  "framework": "scikit-learn",
+  "trained_at": "2026-09-25T04:51:32.473406"
+}

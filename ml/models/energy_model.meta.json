@@ -1,0 +1,23 @@
+{
+  "model_name": "energy_model",
+  "feature_columns": [
+    "current_amps",
+    "voltage_v",
+    "power_kw",
+    "power_factor",
+    "thd_pct",
+    "consumption_kwh",
+    "frequency_hz",
+    "load_variance"
+  ],
+  "label_column": "label",
+  "classes": [
+    "0:normal",
+    "1:fault",
+    "2:critical"
+  ],
+  "scaler": "StandardScaler",
+  "version": "1.0.0",
+  "framework": "scikit-learn",
+  "trained_at": "2026-09-25T04:51:30.900044"
+}

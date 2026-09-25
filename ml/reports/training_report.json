@@ -1,0 +1,82 @@
+{
+  "gas_co2_model": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "test_samples": 100,
+    "cv_accuracy": 1.0,
+    "feature_importances": {
+      "co2_ppm": 0.1956,
+      "co_ppm": 0.2303,
+      "nh3_ppm": 0.2206,
+      "voc_ppm": 0.2581,
+      "temperature_c": 0.019,
+      "humidity_pct": 0.0157,
+      "sensor_drift": 0.0607
+    }
+  },
+  "energy_model": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "test_samples": 100,
+    "cv_accuracy": 1.0,
+    "feature_importances": {
+      "current_amps": 0.1441,
+      "voltage_v": 0.0055,
+      "power_kw": 0.1945,
+      "power_factor": 0.1143,
+      "thd_pct": 0.109,
+      "consumption_kwh": 0.2553,
+      "frequency_hz": 0.0187,
+      "load_variance": 0.1586
+    }
+  },
+  "temperature_model": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "test_samples": 100,
+    "cv_accuracy": 0.998,
+    "feature_importances": {
+      "temperature_c": 0.2828,
+      "humidity_pct": 0.0614,
+      "heat_index_c": 0.1735,
+      "temp_rate_change": 0.1921,
+      "ambient_temp_c": 0.0171,
+      "delta_temp_c": 0.233,
+      "cycles_since_maint": 0.04
+    }
+  },
+  "water_leakage_model": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "test_samples": 100,
+    "cv_accuracy": 1.0,
+    "feature_importances": {
+      "moisture_raw": 0.1681,
+      "moisture_pct": 0.2555,
+      "humidity_pct": 0.0707,
+      "pressure_bar": 0.1265,
+      "flow_rate_lpm": 0.1316,
+      "pressure_drop_bar": 0.1794,
+      "vibration_hz": 0.0071,
+      "sound_db": 0.0611
+    }
+  },
+  "multisensor_model": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "test_samples": 100,
+    "cv_accuracy": 1.0,
+    "feature_importances": {
+      "co2_ppm": 0.0993,
+      "current_amps": 0.1473,
+      "temperature_c": 0.0811,
+      "humidity_pct": 0.0,
+      "moisture_raw": 0.1017,
+      "gas_ppm": 0.19,
+      "sound_db": 0.1867,
+      "power_kw": 0.1938,
+      "vibration_rms": 0.0,
+      "uptime_hrs": 0.0
+    }
+  }
+}

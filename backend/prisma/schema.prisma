@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth ─────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  WORKER
+  INSPECTOR
+}
+
+// ─── Alerts ───────────────────────────────────────────────────────────────────
+
+enum Severity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum AlertType {
+  AIR_QUALITY
+  ENERGY_ANOMALY
+  WATER_LEAK
+  FIRE
+  NOISE
+  TEMPERATURE
+  DEVICE_OFFLINE
+}
+
+enum AlertStatus {
+  ACTIVE
+  RESOLVED
+}
+
+// ─── Inspection ───────────────────────────────────────────────────────────────
+
+enum InspectionType {
+  ROUTINE
+  CORROSION
+  DAMAGE
+  POSSIBLE_LEAK
+  EQUIPMENT_ISSUE
+  OTHER
+}
+
+enum InspectionSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum InspectionStatus {
+  OPEN
+  UNDER_REVIEW
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+// ─── Energy Degradation ───────────────────────────────────────────────────────
+
+enum EnergyTrendClassification {
+  NORMAL
+  EFFICIENCY_DEGRADATION_SUSPECTED
+  ENERGY_ANOMALY
+  INSPECTION_RECOMMENDED
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime      @default(now())
+  inspections  Inspection[]
+}
+
+model Zone {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  devices     Device[]
+  alerts      Alert[]
+  inspections Inspection[]
+  equipment   Equipment[]
+  createdAt   DateTime     @default(now())
+}
+
+/// Structured equipment/location master — shared by sensor readings, alerts, inspections, and AI results.
+model Equipment {
+  id            String      @id @default(uuid())
+  /// Human-readable label, e.g. "PUMP-02"
+  label         String      @unique
+  /// Zone the equipment belongs to
+  zone          Zone        @relation(fields: [zoneId], references: [id])
+  zoneId        String
+  description   String?
+  /// Baseline power consumption in Watts for energy degradation analysis
+  baselinePowerW Float?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  inspections   Inspection[]
+  energySnapshots EnergyBaseline[]
+}
+
+/// Rolling energy baseline snapshot used by the energy degradation algorithm.
+model EnergyBaseline {
+  id             String    @id @default(uuid())
+  equipment      Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId    String
+  /// Short-term average power (last N readings)
+  avgPowerShortW  Float
+  /// Long-term baseline average power
+  avgPowerLongW   Float
+  /// Percentage deviation of short-term from baseline
+  deviationPct    Float
+  classification  EnergyTrendClassification
+  recordedAt      DateTime  @default(now())
+
+  @@index([equipmentId, recordedAt])
+}
+
+/// A field inspection record created by an INSPECTOR user.
+model Inspection {
+  id               String             @id @default(uuid())
+  inspector        User               @relation(fields: [inspectorId], references: [id])
+  inspectorId      String
+  zone             Zone               @relation(fields: [zoneId], references: [id])
+  zoneId           String
+  equipment        Equipment?         @relation(fields: [equipmentId], references: [id])
+  equipmentId      String?
+  /// Short component/location code, e.g. "ZB-P02-P03"
+  locationCode     String?
+  /// Specific component/sub-location label, e.g. "OUTLET_PIPE"
+  component        String?
+  inspectionType   InspectionType
+  severity         InspectionSeverity
+  message          String
+  status           InspectionStatus   @default(OPEN)
+  /// Placeholder for AI analysis result — null until AI module populates it
+  aiResult         Json?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  images           InspectionImage[]
+
+  @@index([equipmentId, createdAt])
+  @@index([inspectorId, createdAt])
+}
+
+/// Image/file attachment metadata for an inspection — binary is NOT stored here.
+model InspectionImage {
+  id           String     @id @default(uuid())
+  inspection   Inspection @relation(fields: [inspectionId], references: [id])
+  inspectionId String
+  /// Relative path / filename within the local upload store
+  storagePath  String
+  /// Original filename provided by the uploader
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  /// Optional caption or note about the image
+  caption      String?
+  uploadedAt   DateTime   @default(now())
+}
+
+// ─── Existing models (unchanged) ─────────────────────────────────────────────
+
+model Device {
+  id         String          @id @default(uuid())
+  deviceKey  String          @unique
+  label      String
+  zone       Zone            @relation(fields: [zoneId], references: [id])
+  zoneId     String
+  lastSeenAt DateTime?
+  isOnline   Boolean         @default(false)
+  readings   SensorReading[]
+  alerts     Alert[]
+  createdAt  DateTime        @default(now())
+}
+
+model SensorReading {
+  id                String   @id @default(uuid())
+  device            Device   @relation(fields: [deviceId], references: [id])
+  deviceId          String
+  temperature       Float?
+  humidity          Float?
+  airQuality        Float?
+  current           Float?
+  noise             Float?
+  waterLeak         Boolean  @default(false)
+  fireDetected      Boolean  @default(false)
+  estimatedPowerW   Float?
+  estimatedEnergyWh Float?
+  estimatedCO2g     Float?
+  recordedAt        DateTime @default(now())
+
+  @@index([deviceId, recordedAt])
+}
+
+model Alert {
+  id            String            @id @default(uuid())
+  type          AlertType
+  severity      Severity
+  message       String
+  zone          Zone?             @relation(fields: [zoneId], references: [id])
+  zoneId        String?
+  device        Device?           @relation(fields: [deviceId], references: [id])
+  deviceId      String?
+  value         Float?
+  threshold     Float?
+  status        AlertStatus       @default(ACTIVE)
+  createdAt     DateTime          @default(now())
+  resolvedAt    DateTime?
+  notifications NotificationLog[]
+}
+
+model NotificationLog {
+  id       String   @id @default(uuid())
+  alert    Alert    @relation(fields: [alertId], references: [id])
+  alertId  String
+  channel  String
+  provider String
+  success  Boolean
+  errorMsg String?
+  sentAt   DateTime @default(now())
+}
+
+model ThresholdConfig {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     Float
+  updatedAt DateTime @updatedAt
+}
