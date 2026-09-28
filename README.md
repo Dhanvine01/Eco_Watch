@@ -1,215 +1,261 @@
-# 🌿 EcoWatch — Industrial Sustainability & Safety Intelligence Platform
+# 🌿 EcoWatch
 
-An enterprise-grade, IoT-driven industrial sustainability and workplace safety monitoring platform. Built with real-time sensor telemetry, deterministic alert engines, AI-powered visual defect inspection, cryptographic evidence & integrity verification, and predictive ML degradation analytics.
+### Industrial Sustainability & Safety Intelligence Platform
 
----
+EcoWatch is an IoT-driven industrial monitoring platform designed to improve **workplace safety, environmental monitoring, equipment inspection, and predictive maintenance**.
 
-## 🔑 Login Credentials
-
-> Seeded automatically by `npx prisma db seed`.
-
-| Role | Email | Password | Landing Page | Primary Capabilities |
-|------|-------|----------|--------------|----------------------|
-| **Admin** | `admin@ecowatch.local` | `password123` | `/admin` | Complete facility oversight, energy telemetry, air quality, device management, simulation triggers, deterministic inspection priority queue, equipment degradation analytics, and Evidence & Integrity Center. |
-| **Worker** | `worker@ecowatch.local` | `password123` | `/worker` | Streamlined safety dashboard: fire detection, water leak alerts, ambient temperature & humidity, air quality, and emergency safety notifications. |
-| **Inspector** | `inspector@ecowatch.local` | `password123` | `/inspector` | Field inspection portal: file multi-point defect reports, upload visual evidence, trigger AI-powered corrosion/damage analysis, and track historical audit trails. |
+The platform combines real-time sensor telemetry, automated alerts, AI-powered visual inspection, predictive analytics, and cryptographic data integrity verification in a unified web application.
 
 ---
 
-## 🌟 Key Platform Features
+## ✨ Key Features
 
-### 1. 🛡️ Evidence & Integrity Center (Cryptographic Proof)
-- **SHA-256 Hash Chaining:** Every incoming telemetry data packet is linked into an immutable cryptographic hash chain with parent hash anchoring.
-- **Anchor Block Verification:** Verifies data authenticity against genesis block hashes to prove zero data loss or database tampering.
-- **Interactive Tampering Simulation:** Live security demonstration mode that modifies historical sensor records to visibly trigger:
-  $$\text{HASH MISMATCH} \longrightarrow \text{ANCHOR MISMATCH} \longrightarrow \text{TAMPERING DETECTED}$$
-- **Pre-Audit Cryptographic Export:** Generate tamper-evident, auditor-ready JSON and PDF compliance packages with cryptographic verification checksums.
-
-### 2. ⚡ Dual Ingestion Architecture (Real Hardware vs Simulation)
-- **`ESP-001` (Assembly Floor):** Dedicated ingestion pipeline for physical hardware (ESP32 microcontrollers with DHT22, MQ-135, KY-038, and CT Current sensors) transmitting via authenticated `POST /api/v1/telemetry` using secure `x-device-key` headers.
-- **`ESP-002` (Storage Bay):** Realistic automated background telemetry simulation for testing anomalies, threshold breaches, and stress testing.
-
-### 3. 🎨 Verdant Green Luxury Aesthetics
-- Tailored organic luxury theme featuring porcelain cream backgrounds (`#fbfbf9`), vibrant forest and emerald accents (`#4f7a38`, `#6fa350`), gold highlights, glassmorphism cards, and an interactive **click-spawn leaf particle animation**.
-
-### 4. 🤖 Multi-Provider AI Vision Inspection
-- Automated visual defect analysis for equipment corrosion, structural cracks, leaks, and safety hazards using Qwen3-VL / OpenAI GPT-4o with automated multi-tier fallback to an intelligent mock provider.
-
-### 5. 🔮 Predictive ML Sensor Analytics
-- Python-powered Scikit-Learn / XGBoost models analyzing equipment energy draw patterns, temperature anomalies, and vibration metrics to predict Remaining Useful Life (RUL) and maintenance urgency.
+* **Real-Time IoT Monitoring** — Collect and monitor temperature, humidity, air quality, energy consumption, noise, water leakage, and fire-related data.
+* **Safety Alert System** — Automatically detects threshold violations and critical safety conditions.
+* **AI Visual Inspection** — Analyzes equipment images for corrosion, cracks, leaks, and other visible defects.
+* **Predictive Maintenance** — Uses machine-learning models to identify abnormal equipment behavior and maintenance requirements.
+* **Evidence & Data Integrity** — Uses SHA-256 hash chaining to detect unauthorized modification of historical telemetry.
+* **Tampering Demonstration** — Includes a controlled simulation for demonstrating how data manipulation can be detected.
+* **Equipment Management** — Maintains equipment history, sensor trends, alerts, and inspection records.
+* **Role-Based Access** — Separate interfaces and permissions for administrators, inspectors, and workers.
+* **Real-Time Dashboard** — Displays live sensor data and system alerts through a modern web interface.
 
 ---
 
-## ⚡ Quick Start
+## 🏗️ System Architecture
+
+```text
+┌─────────────────────┐
+│   ESP32 + Sensors   │
+└──────────┬──────────┘
+           │
+           │ Telemetry
+           ▼
+┌─────────────────────┐
+│   Express Backend   │
+│       :4000         │
+└──────────┬──────────┘
+           │
+     ┌─────┼───────────────┐
+     ▼     ▼               ▼
+┌────────┐ ┌──────────┐ ┌──────────────┐
+│Postgres│ │Alert     │ │SHA-256 Hash  │
+│  DB    │ │Engine    │ │Chain         │
+└────────┘ └──────────┘ └──────────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   React Frontend    │
+│       :5173         │
+└─────────────────────┘
+```
+
+The system also includes a telemetry simulator for testing sensor events and abnormal operating conditions without physical hardware.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer                   | Technology                      |
+| ----------------------- | ------------------------------- |
+| Frontend                | React, JavaScript               |
+| Backend                 | Node.js, Express                |
+| Database                | PostgreSQL                      |
+| ORM                     | Prisma                          |
+| IoT                     | ESP32                           |
+| AI Inspection           | Qwen3-VL / OpenAI               |
+| Machine Learning        | Python, Scikit-learn, XGBoost   |
+| Real-Time Communication | Server-Sent Events (SSE)        |
+| Security                | JWT, HTTP-only Cookies, SHA-256 |
+| Development             | npm, Git, VS Code               |
+
+---
+
+## 👥 User Roles
+
+### Administrator
+
+* Monitor the entire facility
+* View sensor telemetry and alerts
+* Manage devices and equipment
+* Run system simulations
+* Review inspection priorities
+* Verify data integrity
+
+### Inspector
+
+* Create inspection reports
+* Upload equipment images
+* Run AI-based defect analysis
+* Review previous inspections
+
+### Worker
+
+* Monitor critical workplace safety conditions
+* View fire and water-leak alerts
+* Monitor environmental conditions
+* Receive emergency notifications
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- **Node.js:** `^20.19` or `≥22.12`
-- **PostgreSQL:** `14+` running on `localhost:5432`
-- **npm:** `9+` (bundled with Node)
-- **Python (Optional for ML Service):** `3.8+`
 
----
+Make sure the following are installed:
 
-### Step 1: Clone and Configure Environment
+* Node.js `20.19+` or `22.12+`
+* PostgreSQL `14+`
+* npm `9+`
+* Python `3.8+` *(optional, required for ML services)*
+
+### 1. Clone the Repository
 
 ```powershell
-# Clone the repository
 git clone https://github.com/Dhanvine01/Eco_Watch.git
 cd Eco_Watch
+```
 
-# Backend Environment
+### 2. Configure Environment Variables
+
+Create the backend environment file:
+
+```powershell
 copy backend\.env.example backend\.env
 ```
 
-Ensure `backend\.env` contains your PostgreSQL credentials:
+Update `backend\.env` with your PostgreSQL credentials:
+
 ```env
 NODE_ENV=development
 PORT=4000
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/ecowatch
-JWT_SECRET=super-secure-secret-key-change-in-production-min-32-chars
+JWT_SECRET=your-secure-secret-key
 SIMULATION_ENABLED=true
 AI_PROVIDER=auto
 ```
 
----
-
-### Step 2: Install Dependencies
+### 3. Install Dependencies
 
 ```powershell
-# Install root, backend, and frontend dependencies
 npm run install:all
 ```
-*(Or install manually in each folder: `cd backend && npm install` then `cd ../frontend && npm install`)*
 
----
-
-### Step 3: Initialize Database & Seed Data
+### 4. Initialize the Database
 
 ```powershell
 cd backend
-# Run migrations and generate Prisma client
+
 npx prisma migrate deploy
-# Seed default users, devices, zones, and equipment
 npx prisma db seed
 ```
 
----
+The seed command creates the default users, devices, equipment, and initial system data.
 
-### Step 4: Run Development Servers
+### 5. Start the Application
 
-You can launch both backend and frontend concurrently from the root directory:
+From the project root:
 
 ```powershell
-# From the project root
 npm run dev
 ```
 
-Or run them individually in separate terminals:
-```powershell
-# Terminal 1 — Backend (Port 4000)
-cd backend
-npm run dev
+The application will be available at:
 
-# Terminal 2 — Frontend (Port 5173 / 5174)
-cd frontend
-npm run dev
+```text
+Frontend: http://localhost:5173
+Backend:  http://localhost:4000
 ```
 
-Open your browser at **`http://localhost:5173`** (or **`http://localhost:5174`**).
+---
+
+## 🔐 Demo Accounts
+
+The following accounts are created automatically during database seeding.
+
+| Role      | Email                      | Password      |
+| --------- | -------------------------- | ------------- |
+| Admin     | `admin@ecowatch.local`     | `password123` |
+| Inspector | `inspector@ecowatch.local` | `password123` |
+| Worker    | `worker@ecowatch.local`    | `password123` |
+
+> **Note:** These credentials are intended only for local development and demonstration.
 
 ---
 
-## 🗺️ Application Routes
+## 🔒 Data Integrity
 
-### Admin Portal (`/admin/*`)
-| URL | Description |
-|-----|-------------|
-| `/admin` | Real-time overview: live sensor telemetry, active alerts, simulation controls |
-| `/admin/integrity` | **Evidence & Integrity Center:** SHA-256 hash-chain validator, tampering simulation demo, audit export |
-| `/admin/energy` | High-frequency voltage, current, and energy consumption metrics |
-| `/admin/air-quality` | MQ-135 sensor metrics: CO, CO2, smoke, and air quality index (AQI) |
-| `/admin/temp-humidity` | DHT22 temperature and relative humidity tracking |
-| `/admin/noise` | KY-038 acoustic noise and decibel monitoring |
-| `/admin/water-fire` | Critical safety triggers: flame detection and water leak sensors |
-| `/admin/alerts` | Alert management dashboard with acknowledgment and resolution tools |
-| `/admin/devices` | IoT device health status, signal strength, and firmware status |
-| `/admin/history` | Multi-sensor historical time-series charts |
-| `/admin/inspections` | Prioritized inspection queue calculated via deterministic scoring |
-| `/admin/equipment/:id/history` | Full equipment lifecycle: sensor trends, alert logs, and inspection records |
+EcoWatch includes a cryptographic integrity layer for telemetry records.
 
-### Inspector Portal (`/inspector/*`)
-| URL | Description |
-|-----|-------------|
-| `/inspector` | Inspection dashboard: submitted reports, quick actions, pending audits |
-| `/inspector/new` | File new inspection with severity rating, zone selection, and photo upload |
-| `/inspector/history` | Complete historical inspection logs with status filtering |
-| `/inspector/history/:id` | Inspection details with AI-assisted visual analysis feedback |
+Each telemetry record is linked to the previous record using a **SHA-256 hash chain**. This allows the system to identify modifications to historical records.
 
-### Worker Portal (`/worker`)
-| URL | Description |
-|-----|-------------|
-| `/worker` | Simplified industrial floor safety monitor: fire, water leak, air quality alerts |
+```text
+Telemetry Record
+       ↓
+ SHA-256 Hash
+       ↓
+Next Record
+       ↓
+ SHA-256 Hash
+       ↓
+Integrity Verification
+```
+
+The platform also provides a controlled tampering demonstration that intentionally modifies stored data and verifies whether the integrity chain detects the change.
 
 ---
 
-## 🔌 Core API Reference
+## 🧪 Testing & Verification
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/health` | GET | None | Backend service health check |
-| `/api/v1/auth/login` | POST | None | Authenticate user & issue httpOnly cookie |
-| `/api/v1/auth/logout` | POST | Cookie | Destroy active session |
-| `/api/v1/auth/me` | GET | Cookie | Current session info |
-| `/api/v1/readings/latest` | GET | Cookie | Latest telemetry readings per device |
-| `/api/v1/readings/history` | GET | Cookie | Time-series sensor history |
-| `/api/v1/stream` | GET | Cookie | Real-time Server-Sent Events (SSE) telemetry stream |
-| `/api/v1/telemetry` | POST | Device Key | Ingest real ESP32 hardware telemetry packets |
-| `/api/v1/alerts` | GET | Cookie | Fetch active system alerts |
-| `/api/v1/alerts/:id/resolve` | POST | Admin | Acknowledge & resolve an active alert |
-| `/api/v1/equipment` | GET | Authenticated | List all monitored equipment assets |
-| `/api/v1/inspections` | POST | Inspector/Admin | Submit inspection record |
-| `/api/v1/inspections/:id/images` | POST | Inspector/Admin | Upload visual inspection photos |
-| `/api/v1/simulation/scenario` | POST | Admin | Trigger simulated anomaly scenarios |
-
----
-
-## 🛠️ Verification & Quality Checks
+### Backend
 
 ```powershell
-# Backend Typecheck & Tests
 cd backend
+
 npx tsc --noEmit
 npm test
+```
 
-# Frontend Production Build
+### Frontend
+
+```powershell
 cd frontend
+
 npm run build
 ```
 
 ---
 
-## 🏗️ Architecture
+## 📁 Project Structure
 
+```text
+Eco_Watch/
+│
+├── backend/
+│   ├── prisma/
+│   ├── src/
+│   └── .env.example
+│
+├── frontend/
+│   ├── src/
+│   └── public/
+│
+├── package.json
+└── README.md
 ```
-[ ESP32 Hardware (ESP-001) ] ──┐
-                              │  POST /api/v1/telemetry (x-device-key)
-[ Telemetry Simulator (ESP-002) ] ─┴─► [ Express 5 Backend :4000 ]
-                                         │
-                 ┌───────────────────────┼────────────────────────┐
-                 ▼                       ▼                        ▼
-         [ PostgreSQL DB ]       [ Rule Alert Engine ]    [ SHA-256 Hash Chain ]
-         (Prisma ORM)            (Instant evaluation)     (Cryptographic Integrity)
-                 │                       │                        │
-                 └───────────────────────┼────────────────────────┘
-                                         ▼
-                             [ SSE Stream /api/v1/stream ]
-                                         │
-                                         ▼
-                             [ React 19 Frontend :5173 ]
-```
+
+---
+
+## 🎯 Project Objective
+
+EcoWatch aims to provide a unified platform for:
+
+**Monitor → Detect → Analyze → Predict → Verify**
+
+By combining IoT sensing, automated safety alerts, AI inspection, machine learning, and cryptographic verification, the system provides a practical approach to industrial safety and sustainability monitoring.
 
 ---
 
 ## 📄 License
 
-This project is developed for industrial monitoring and educational hackathon demonstration. Open source under the [MIT License](LICENSE).
+This project is developed for **educational, industrial monitoring, and hackathon demonstration purposes** and is released under the [MIT License](LICENSE).
